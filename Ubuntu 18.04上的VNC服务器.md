@@ -11,12 +11,8 @@
 
 在这里介绍安装gnome。
 
-	完整安装（不推荐）：
-	apt install ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal -y
-	
-	仅安装核心组件：
-	假如不安装例如 office、浏览器、等等的额外组件，可以使用如下命令：
-	apt install --no-install-recommends ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal -y
+	仅安装核心组件,假如不安装例如 office、浏览器、等等的额外组件，可以使用如下命令：
+	sudo apt install --no-install-recommends ubuntu-desktop gnome-panel gnome-settings-daemon metacity nautilus gnome-terminal -y
 
 使用apt方式安装
 
@@ -24,10 +20,13 @@
 
 	# 添加chrome下载源到系统下载源
 	sudo wget https://repo.fdzh.org/chrome/google-chrome.list -P /etc/apt/sources.list.d/
+
 	# 导入Google软件的公钥
 	wget -q -O - https://dl.google.com/linux/linux_signing_key.pub  | sudo apt-key add -
+
 	# 更新系统软件可用列表
-	apt update
+	sudo apt update
+
 	# 安装Chrome
 	sudo apt install google-chrome-stable
 
@@ -45,11 +44,11 @@
 	修改~/.vnc/xstartup中的内容为：
 	
 	备份自动生成的原有文件
-	cp /root/.vnc/xstartup  /root/.vnc/xstartup.bak
+	cp /home/cpu/.vnc/xstartup  /home/cpu/.vnc/xstartup.bak
 	
 	
 	修改文件
-	vim /root/.vnc/xstartup
+	sudo vim /home/cpu/.vnc/xstartup
 	
 	#!/bin/sh
 
@@ -62,9 +61,9 @@
 	[ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
 	[ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
 	xsetroot -solid grey
-	# vncconfig -iconic &
-	# x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
-	# x-window-manager &
+	vncconfig -iconic &
+	x-terminal-emulator -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
+	x-window-manager &
 	
 	
 	重启vncserver
@@ -78,8 +77,8 @@
 	成功
 	
 
-	启动/root/.vnc/xstartup中指定的应用程序
-	日志文件是/root/.vnc/ubuntu:1.log
+	启动/home/cpu/.vnc/xstartup中指定的应用程序
+	日志文件是/home/cpu/.vnc/ubuntu:1.log
 	
 	VNC服务器将为您创建的每个新VNC桌面打开一个新端口。您的Ubuntu系统现在应该在端口上监听5901传入的VNC连接：
 	
@@ -110,29 +109,40 @@
 ##四 VNC服务器系统启动脚本
 
 	尽管当前的配置有效，但可能需要设置systemd启动脚本以轻松管理多个VNC桌面会话。
-
-	创建一个新文件，vim /etc/systemd/system/vncserver.service  例如：
-
-	
-	可以更改屏幕分辨率设置并应用其他
-
+	创建一个新文件，sudo vim /etc/systemd/system/vncserver@.service  例如：
 	vncserver选项或参数：
 
 	[Unit]
-	Description=Systemd VNC server startup script for Ubuntu 18.04
+	Description=Start VNC server at startup
 	After=syslog.target network.target
+	
 	[Service]
 	Type=forking
-	User=root
-	ExecStartPre=/usr/bin/vncserver -kill :1
-	ExecStart=/usr/bin/vncserver -depth 24 -geometry 1440x900
-	PIDFile=/root/.vnc/%H:%i.pid
-	ExecStop=/usr/bin/vncserver -kill :1
+	User=cpu
+	PIDFile=/home/cpu/.vnc/%H:%i.pid
+	#ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+	ExecStart=/usr/bin/vncserver -depth 24 -geometry 1915x1005 :%i
+	ExecStop=/usr/bin/vncserver -kill :%i
+	
 	[Install]
 	WantedBy=multi-user.target
 	 
 
-
-	以下linux命令将使VNC桌面1在重启后启动：
-	$ sudo systemctl enable vncserver.service
+	保存并关闭文件。
+	
+	接下来，让系统知道新的单元文件。
+	
+	sudo systemctl daemon-reload
+	启用单位文件。
+	
+	sudo systemctl enable vncserver@1.service
+	停止VNC服务器的当前实例（如果它仍在运行）。
+	
+	vncserver -kill :1
+	然后启动它，因为您将启动任何其他systemd服务。
+	
+	sudo systemctl start vncserver@1
+	您可以验证它以此命令开始：
+	
+	sudo systemctl status vncserver@1
 
