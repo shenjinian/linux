@@ -121,7 +121,7 @@
 	User=cpu
 	PIDFile=/home/cpu/.vnc/%H:%i.pid
 	#ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
-	ExecStart=/usr/bin/vncserver -depth 24 -geometry 1915x1005 :%i
+	ExecStart=/usr/bin/vncserver -depth 24 -geometry 1918x1017 :%i
 	ExecStop=/usr/bin/vncserver -kill :%i
 	
 	[Install]
