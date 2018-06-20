@@ -117,6 +117,7 @@ Samba使Linux系统（包括Ubuntu）能够与Windows系统（包括Windows 10�
 ## 第5步：配置ufw防火墙 ##
 smb服务有TCP和UDP协议的139和445端口
 客户端连接过程发现，window server 2008 R2只需要开放139即可
+
 而window server 2016和win10 需要139和445同时开放才可以
 
 1.如果允许所有IP访问此smb服务，开放139de TCP即可
@@ -126,4 +127,5 @@ smb服务有TCP和UDP协议的139和445端口
 2.如果允许指定IP访问此smb服务，命令如下
 
 	sudo ufw allow from 202.119.189.50 to any port 139
+	sudo ufw allow from 202.119.189.50 to any port 445
 
