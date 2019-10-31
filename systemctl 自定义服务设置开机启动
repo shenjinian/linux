@@ -1,6 +1,6 @@
-##Ubutun 18.04 开机启动脚本
+##systemctl 自定义服务设置开机启动##
 
-    ubutun 18.04不再使用initd管理系统，改用systemd。
+    ubutun 18.04和CentOS7以后不再使用initd管理系统，改用systemd。
     为了像以前一样，在/etc/rc.local中设置开机启动程序，需要以下几步：
 
 ##实现原理
