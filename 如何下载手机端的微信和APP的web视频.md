@@ -138,7 +138,7 @@ Fiddler 下载地址：https://www.telerik.com/download/fiddler/fiddler4
 
 抓包分析：
 
-![](image/1.png)
+![](1.png)
 
 在URL一栏，直接发现mp4链接，并没有采用HLS的m3u8切片，那就简单了，直接把地址复制出来进行简单拼接，丢到迅雷下载。
 
@@ -154,7 +154,7 @@ Fiddler 下载地址：https://www.telerik.com/download/fiddler/fiddler4
 
 抓包分析：
 
-![](image/2.png)
+![](2.png)
 
 在URL一栏，发现视频采用了HLS，红框圈出来的j即是m3u8索引文件，后面的包都是ts切片，把m3u8的索引链接复制出来进行简单拼接，就是完整的m3u8的完整链接。把这个链接交给M3U8 Downloader下载神器就可以了
 
@@ -176,9 +176,9 @@ M3U8 Downloader下载地址：https://github.com/nilaoda/N_m3u8DL-CLI/releases
 
 对案例2的m3u8索引链接进行下载
 
-![](image/3.png)
+![](3.png)
 
-![](image/4.png)
+![](4.png)
 
 
 
